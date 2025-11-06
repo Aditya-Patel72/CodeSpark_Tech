@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindSync - Mental Wellness for Indian Students</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #6b8cbc;
+            --accent: #ff6b6b;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --text: #333;
+            --text-light: #6c757d;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary);
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--accent);
+        }
+
+        /* Utility Classes */
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -5px;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background-color: var(--secondary);
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-button,
+        .secondary-button,
+        .white-button {
+            display: inline-block;
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            white-space: nowrap;
+            /* Prevent text wrapping */
+        }
+
+        .cta-button {
+            background-color: var(--primary);
+            color: var(--light);
+            border: 2px solid var(--primary);
+        }
+
+        .cta-button:hover {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .secondary-button {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .secondary-button:hover {
+            background-color: var(--primary);
+            color: var(--light);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .white-button {
+            background-color: var(--light);
+            color: var(--primary);
+            border: 2px solid var(--light);
+        }
+
+        .white-button:hover {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+            color: var(--dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Header */
+        header {
+            background-color: var(--light);
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            transition: box-shadow 0.3s ease;
+        }
+
+        header.scrolled {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            /* Allow wrapping on smaller screens */
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-right: 20px;
+        }
+
+        .navbar .logo i {
+            font-size: 2.2rem;
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+
+        .navbar .logo h1 {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            /* Allow nav links to take available space */
+            justify-content: flex-end;
+            /* Push links to the right */
+        }
+
+        .navbar .nav-links a {
+            color: var(--text);
+            font-weight: 500;
+            margin-left: 25px;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .navbar .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0%;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .navbar .nav-links a:hover::after,
+        .navbar .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .navbar .cta-button {
+            margin-left: 30px;
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: var(--light);
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            animation: moveCircle1 15s infinite alternate ease-in-out;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            animation: moveCircle2 12s infinite alternate ease-in-out;
+        }
+
+        @keyframes moveCircle1 {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(100px, 50px) scale(1.1);
+            }
+        }
+
+        @keyframes moveCircle2 {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(-80px, -40px) scale(1.2);
+            }
+        }
+
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 35px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.3s forwards;
+        }
+
+        .hero-buttons {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.6s forwards;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background-color: var(--light);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .feature-card {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary) 0%, var(--secondary) 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease-out;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--light);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .feature-card p {
+            font-size: 1rem;
+            color: #555;
+            flex-grow: 1;
+            /* Allow description to take space */
+        }
+
+        .feature-card .secondary-button {
+            margin-top: 20px;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            align-self: center;
+            /* Center the button */
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 100px 0;
+            background-color: #f0f8ff;
+            /* A very light blue */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .how-it-works::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 0v4H0v2h4v4h2V6h4V4H6z'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .how-it-works .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .step {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .step:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .step-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            background-color: var(--primary);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 3px solid var(--secondary);
+            color: var(--light);
+            transition: all 0.3s ease;
+        }
+
+        .step:hover .step-number {
+            background-color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .step h3 {
+            font-size: 1.7rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .step p {
+            font-size: 1rem;
+            color: #555;
+            flex-grow: 1;
+        }
+
+        .step .secondary-button {
+            margin-top: 20px;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            align-self: center;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 100px 0;
+            background-color: var(--light);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            color: #444;
+            margin-bottom: 25px;
+            font-style: italic;
+            position: relative;
+            padding-left: 20px;
+            flex-grow: 1;
+        }
+
+        .testimonial-text::before {
+            content: "\201C";
+            /* Left double quotation mark */
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 3rem;
+            color: var(--secondary);
+            line-height: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            color: var(--light);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-right: 15px;
+        }
+
+        .author-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 3px;
+            color: var(--primary);
+        }
+
+        .author-info p {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            color: var(--light);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .cta-buttons .secondary-button {
+            color: var(--light);
+            border-color: var(--light);
+        }
+
+        .cta-buttons .secondary-button:hover {
+            background-color: var(--light);
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 60px 0 20px;
+            font-size: 0.95rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        .footer-column p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+        }
+
+        .social-links a {
+            color: var(--light);
+            font-size: 1.3rem;
+            margin-right: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--secondary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        .footer-links i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .footer-bottom a {
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0 5px;
+        }
+
+        .footer-bottom a:hover {
+            color: var(--secondary);
+        }
+
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .fade-in-delay-1 {
+            animation-delay: 0.2s;
+        }
+
+        .fade-in-delay-2 {
+            animation-delay: 0.4s;
+        }
+
+        .fade-in-delay-3 {
+            animation-delay: 0.6s;
+        }
+
+        /* Add more delays as needed for specific elements */
+
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .navbar .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: var(--light);
+                position: absolute;
+                top: 70px;
+                left: 0;
+                padding: 20px;
+                box-shadow: var(--shadow);
+                border-top: 1px solid #eee;
+            }
+
+            .navbar .nav-links.active {
+                display: flex;
+            }
+
+            .navbar .nav-links a {
+                margin: 10px 0;
+                padding: 10px 0;
+                border-bottom: 1px solid #eee;
+            }
+
+            .navbar .nav-links a:last-child {
+                border-bottom: none;
+            }
+
+            .navbar .cta-button {
+                margin: 10px 0;
+                width: 100%;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .hero h2 {
+                font-size: 2.8rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section-title h2 {
+                font-size: 2.2rem;
+            }
+
+            .section-title p {
+                font-size: 1rem;
+            }
+
+            .features-grid,
+            .steps,
+            .testimonial-grid,
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .cta-section p {
+                font-size: 1.05rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar .logo h1 {
+                font-size: 1.5rem;
+            }
+
+            .navbar .logo i {
+                font-size: 1.8rem;
+            }
+
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 0.95rem;
+            }
+
+            .cta-button,
+            .secondary-button,
+            .white-button {
+                padding: 12px 25px;
+                font-size: 0.9rem;
+            }
+
+            .feature-icon {
+                font-size: 3rem;
+                width: 70px;
+                height: 70px;
+            }
+
+            .step-number {
+                font-size: 2rem;
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#home" class="logo">
+                    <i class="fas fa-brain"></i>
+                    <h1>MindSync</h1>
+                </a>
+                <div class="nav-links">
+                    <a href="{{ url_for('home') }}" class="active">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#features">Features</a>
+                    <a href="#contact">Contact</a>
+                    <a href="{{ url_for('login') }}">Login</a>
+                    <a href="{{ url_for('register') }}">Register</a>
+                    <a href="{{ url_for('chatbot_page') }}" class="cta-button">Get Started</a>
+                </div>
+
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>Your Safe Space for Mental Wellness</h2>
+            <p>We've built a safe, private space for Indian students to navigate the unique pressures of academic life –
+                from exam stress and career anxiety to personal struggles.</p>
+            <p>Our platform uses smart technology to understand you, offering support in your own language and with
+                cultural sensitivity.</p>
+            <div class="hero-buttons">
+                <a href="{{ url_for('register') }}" class="cta-button">Start Your Journey</a>
+                <a href="{{ url_for('home') }}#features" class="cta-button" >Features</a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="features" id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>About MindSync</h2>
+                <p>We are dedicated to providing mental wellness support specifically designed for the unique challenges
+                    faced by Indian students.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Our Mission</h3>
+                    <p>To create a supportive ecosystem where every Indian student can access mental health resources
+                        without stigma.</p>
+                    <a href="#about" class="secondary-button">Learn More</a>
+                </div>
+                <div class="feature-card fade-in fade-in-delay-1">
+                    <div class="feature-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Our Vision</h3>
+                    <p>A future where mental wellness is as prioritized as academic success in every Indian educational
+                        institution.</p>
+                    <a href="#about" class="secondary-button">Our Vision</a>
+                </div>
+                <div class="feature-card fade-in fade-in-delay-2">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Our Team</h3>
+                    <p>Comprised of mental health professionals, technologists, and education experts passionate about
+                        student wellbeing.</p>
+                    <a href="#about" class="secondary-button">Meet Team</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <!-- Features Section -->
+<section class="features" id="features">
+    <div class="container">
+        <div class="section-title">
+            <h2>Why MindSync Stands Out</h2>
+            <p>We blend smart technology with human understanding to support you in your own language, with tools
+                that actually make sense for your life in India.</p>
+        </div>
+
+        <div class="features-grid">
+            <!-- Smart AI Support -->
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>Smart AI Support</h3>
+                <p>Our AI understands your context and provides personalized support in your preferred language,
+                    available 24/7.</p>
+                <a href="{{ url_for('chatbot_page')}}" class="secondary-button">Learn More</a>
+            </div>
+
+            <!-- Peer Community -->
+            <div class="feature-card fade-in fade-in-delay-1">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Peer Community</h3>
+                <p>Connect with fellow students who understand your struggles and can offer genuine support and
+                    empathy.</p>
+                <a href="{{ url_for('peer') }}" class="secondary-button">Join Community</a>
+
+            </div>
+
+            <!-- Professional Help -->
+            <div class="feature-card fade-in fade-in-delay-2">
+                <div class="feature-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h3>Professional Help</h3>
+                <p>Access licensed mental health professionals who understand the unique challenges faced by Indian
+                    students.</p>
+                <a href="{{ url_for('doctor')}}" class="secondary-button">Find Help</a>
+            </div>
+
+            <!-- Complete Privacy -->
+            <div class="feature-card fade-in fade-in-delay-3">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Complete Privacy</h3>
+                <p>Your conversations and data are encrypted and completely private. We prioritize your
+                    confidentiality.</p>
+                <a href="{{ url_for('chatbot_page') }}" class="secondary-button">Our Promise</a>
+            </div>
+
+            <!-- Multilingual Support -->
+            <div class="feature-card fade-in fade-in-delay-1">
+                <div class="feature-icon">
+                    <i class="fas fa-language"></i>
+                </div>
+                <h3>Multilingual Support</h3>
+                <p>Communicate comfortably in Hindi, English, or other regional languages with culturally sensitive
+                    responses.</p>
+                <a href="#features" class="secondary-button">See Languages</a>
+            </div>
+
+            <!-- University Integration -->
+            <div class="feature-card fade-in fade-in-delay-2">
+                <div class="feature-icon">
+                    <i class="fas fa-university"></i>
+                </div>
+                <h3>University Integration</h3>
+                <p>We provide universities with insights to better support their student community while maintaining
+                    individual privacy.</p>
+                <a href="#about" class="secondary-button">For Universities</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- How It Works Section
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>How MindSync Works</h2>
+                <p>Simple steps to get the support you need, when you need it.</p>
+            </div>
+            <div class="steps">
+                <div class="step fade-in">
+                    <div class="step-number">1</div>
+                    <h3>Sign Up Securely</h3>
+                    <p>Create your private account in minutes. Your information is protected with enterprise-grade
+                        security.</p>
+                    <a href="#register" class="secondary-button">Sign Up</a>
+                </div>
+                <div class="step fade-in fade-in-delay-1">
+                    <div class="step-number">2</div>
+                    <h3>Tell Us About Yourself</h3>
+                    <p>Share your preferences, challenges, and goals so we can personalize your experience.</p>
+                    <a href="#dashboard" class="secondary-button">Create Profile</a>
+                </div>
+                <div class="step fade-in fade-in-delay-2">
+                    <div class="step-number">3</div>
+                    <h3>Choose Your Support</h3>
+                    <p>Select from AI chat, peer support, or professional counseling based on your current needs.</p>
+                    <a href="#features" class="secondary-button">View Options</a>
+                </div>
+                <div class="step fade-in fade-in-delay-3">
+                    <div class="step-number">4</div>
+                    <h3>Get Ongoing Support</h3>
+                    <p>Access tools, resources, and check-ins to maintain your mental wellness journey.</p>
+                    <a href="#features" class="secondary-button">Explore Resources</a>
+                </div>
+            </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>What Students Say</h2>
+                <p>Hear from Indian students who have found support through MindSync.</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card fade-in">
+                    <div class="testimonial-text">
+                        "During my final exams, I was overwhelmed with stress. MindSync's AI chat helped me calm down at
+                        2 AM when I couldn't sleep. It felt like talking to someone who truly understood."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">P</div>
+                        <div class="author-info">
+                            <h4>Priya S.</h4>
+                            <p>Engineering Student, Delhi</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-in fade-in-delay-1">
+                    <div class="testimonial-text">
+                        "As an international student, I felt isolated. Connecting with peers through MindSync who shared
+                        similar experiences made me feel less alone."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">R</div>
+                        <div class="author-info">
+                            <h4>Rahul K.</h4>
+                            <p>MBA Student, Abroad</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-in fade-in-delay-2">
+                    <div class="testimonial-text">
+                        "I was hesitant about seeking help, but MindSync's privacy assurance made me comfortable."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">A</div>
+                        <div class="author-info">
+                            <h4>Anjali M.</h4>
+                            <p>Medical Student, Mumbai</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="#testimonials" class="cta-button fade-in fade-in-delay-3">View All Testimonials</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="get-started">
+        <div class="container">
+            <h2>Start Your Mental Wellness Journey Today</h2>
+            <p>Whether you need someone to talk to at 3 AM, want to connect with someone who gets it, or need
+                professional help - we're here for you.</p>
+            <div class="cta-buttons">
+                <a href="#download" class="white-button">Download App</a>
+                <a href="#counselor" class="secondary-button">Talk to a Counselor</a>
+                <a href="#community" class="secondary-button">Join Peer Community</a>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- Contact Section -->
+    <section class="features" id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact Us</h2>
+                <p>Have questions or need assistance? We're here to help.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email Us</h3>
+                    <p>support@mindsync.com</p>
+                    <a href="mailto:support@mindsync.com" class="secondary-button">Send Email</a>
+                </div>
+                <div class="feature-card fade-in fade-in-delay-1">
+                    <div class="feature-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h3>Call Us</h3>
+                    <p>+91 1800-123-HELP</p>
+                    <a href="tel:+9118001234357" class="secondary-button">Make Call</a>
+                </div>
+                <div class="feature-card fade-in fade-in-delay-2">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Visit Us</h3>
+                    <p>Mumbai, India</p>
+                    <a href="#contact" class="secondary-button">Get Directions</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>MindSync</h3>
+                    <p>A safe, private space for Indian students to navigate academic pressures and improve mental
+                        well-being.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#about">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:support@mindsync.com"><i class="fas fa-envelope"></i>
+                                support@mindsync.com</a></li>
+                        <li><a href="tel:+9118001234357"><i class="fas fa-phone"></i> +91 1800-123-HELP</a></li>
+                        <li><a href="#contact"><i class="fas fa-map-marker-alt"></i> Mumbai, India</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 MindSync. All rights reserved. |
+                    <a href="#privacy">Privacy Policy</a> |
+                    <a href="#terms">Terms of Service</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle 
+        document.querySelector('.mobile-menu').addEventListener('click', function () {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        });
+
+        // Smooth scrolling for anchor links 
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#' || targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    // Close mobile menu if open 
+                    if (window.innerWidth <= 992) {
+                        document.querySelector('.nav-links').classList.remove('active');
+                    }
+                    // Update active class
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Add scroll effect to header 
+        window.addEventListener('scroll', function () {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for fade-in animations
+        const fadeInElements = document.querySelectorAll('.fade-in');
+
+        const observerOptions = {
+            root: null, /* viewport */
+            rootMargin: '0px',
+            threshold: 0.1 /* element is 10% visible */
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 1s ease-out forwards';
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, observerOptions);
+
+        fadeInElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Set active class for navigation links based on scroll position
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 100 && pageYOffset < sectionTop + sectionHeight - 100) {
+                    current = '#' + section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === current) {
+                    a.classList.add('active');
+                }
+            });
+        });
+
+        // Initialize animations on page load
+        window.addEventListener('load', () => {
+            // Trigger fade-in for elements already in view
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    if (isElementInViewport(el)) {
+                        el.style.animation = 'fadeInUp 1s ease-out forwards';
+                    }
+                });
+            }, 100);
+        });
+
+        function isElementInViewport(el) {
+            const rect = el.getBoundingClientRect();
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+        }
+    </script>
+</body>
+
+</html>

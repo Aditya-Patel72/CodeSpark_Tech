@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Doctors — Demo (HTML + JS)</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <!-- QRCode lib -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <!-- Jitsi External API loads dynamically by script in JS (we'll append it) -->
+    <style>
+         :root {
+            --primary: #0078d7;
+            --accent: #023e8a;
+            --muted: #666
+        }
+        
+        body {
+            font-family: Inter, Arial, sans-serif;
+            margin: 0;
+            background: #fafafa;
+            color: #111
+        }
+        
+        header {
+            background: #fff;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee
+        }
+        
+        header h1 {
+            margin: 0;
+            color: var(--accent);
+            font-size: 18px
+        }
+        
+        header nav a {
+            margin-left: 14px;
+            color: var(--primary);
+            text-decoration: none;
+            cursor: pointer
+        }
+        
+        main {
+            padding: 22px;
+            max-width: 1100px;
+            margin: 0 auto
+        }
+        
+        .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px
+        }
+        
+        .doctor-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+            text-align: center
+        }
+        
+        .doctor-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 8px
+        }
+        
+        .doctor-card h3 {
+            margin: 6px 0;
+            color: var(--accent);
+            font-size: 16px
+        }
+        
+        .doctor-card p {
+            margin: 0;
+            color: var(--muted)
+        }
+        /* modal */
+        
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999
+        }
+        
+        .modal {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 760px;
+            width: 95%;
+            position: relative
+        }
+        
+        .modal .close {
+            position: absolute;
+            right: 12px;
+            top: 8px;
+            border: none;
+            background: transparent;
+            font-size: 22px;
+            cursor: pointer
+        }
+        
+        .modal img.profile {
+            width: 140px;
+            height: 140px;
+            border-radius: 70px;
+            border: 4px solid var(--primary);
+            display: block;
+            margin: 0 auto 10px;
+            object-fit: cover
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer
+        }
+        
+        .btn.green {
+            background: #28a745
+        }
+        
+        .center {
+            text-align: center
+        }
+        
+        input[type=text] {
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            width: 80%;
+            display: block;
+            margin: 10px auto
+        }
+        /* dashboard */
+        
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 20px
+        }
+        
+        .card {
+            background: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06)
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse
+        }
+        
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #eee
+        }
+        
+        th {
+            background: var(--primary);
+            color: #fff
+        }
+        
+        .small {
+            font-size: 13px;
+            color: #666
+        }
+        
+        footer {
+            padding: 18px;
+            text-align: center;
+            color: #888
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>👩‍⚕️ Clini</h1>
+        <nav>
+            <a id="link-home">Doctors</a>
+            <a id="link-dashboard">Doctor Dashboard</a>
+        </nav>
+    </header>
+
+    <main id="app">
+        <!-- Doctors list -->
+        <section id="doctors-view">
+            <h2 style="color:var(--accent)">Meet Our Doctors</h2>
+            <p class="small" style="color:var(--muted)">Experienced specialists providing world-class care</p>
+            <div class="doctors-grid" id="doctorsGrid" style="margin-top:12px;"></div>
+        </section>
+
+        <!-- Dashboard -->
+        <section id="dashboard-view" style="display:none">
+            <h1 style="color:var(--accent)">👨‍⚕️ Doctor Dashboard</h1>
+            <div class="grid-4">
+                <div class="card" id="stat-total">Total Patients: 0</div>
+                <div class="card" id="stat-treated">Treated Patients: 0</div>
+                <div class="card" id="stat-admitted">Admitted Patients: 0</div>
+                <div class="card" id="stat-beds">Beds: 0 occupied / 0 total</div>
+            </div>
+
+            <h2 style="color:var(--primary);margin-top:18px">Department Activity</h2>
+            <ul id="dept-list"></ul>
+
+            <h2 style="color:var(--primary);margin-top:18px">Blood Bank Status</h2>
+            <div id="blood-bank" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px"></div>
+
+            <h2 style="color:var(--primary);margin-top:18px">Medicine Inventory</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Medicine</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="medicines-body"></tbody>
+            </table>
+
+            <h2 style="color:var(--primary);margin-top:18px">Patient History</h2>
+            <ul id="patient-history"></ul>
+        </section>
+    </main>
+
+    <footer>Demo — place your images in <code>/images</code> or update paths in the data array</footer>
+
+    <!-- Modal placeholder -->
+    <div id="modal-root"></div>
+
+    <script>
+        /************************************************************************
+         * DATA: the doctors array converted from your JS
+         * Update image paths if required.
+         ************************************************************************/
+        const doctors = [{
+            id: 1,
+            name: "Dr. Priya Sharma",
+            department: "Cardiologist",
+            bio: "Leading cardiologist with 12+ years of experience.",
+            experience: "Worked at ABC Heart Institute, 500+ surgeries.",
+            image: "images/Dr. Priya Sharma.png",
+            fee: 800
+        }, {
+            id: 2,
+            name: "Dr. Ankit Verma",
+            department: "Neurologist",
+            bio: "Specialist in brain and spinal cord disorders.",
+            experience: "Ex-consultant at NeuroCare Hospital.",
+            image: "images/Dr. Ankit Verma.jpg",
+            fee: 900
+        }, {
+            id: 3,
+            name: "Dr. Meena Kapoor",
+            department: "Paediatrician",
+            bio: "Trusted paediatrician focusing on child health and wellness.",
+            experience: "10+ years in child healthcare.",
+            image: "images/Dr. Meena Kapoor.jpeg",
+            fee: 600
+        }, {
+            id: 4,
+            name: "Dr. Rajesh Singh",
+            department: "Orthopaedic Surgeon",
+            bio: "Expert in bone and joint replacement surgeries.",
+            experience: "Senior Orthopaedic Surgeon at City Hospital.",
+            image: "images/Dr. Rajesh Singh.jpg",
+            fee: 850
+        }, {
+            id: 5,
+            name: "Dr. Rajesh Chaturvedi",
+            department: "Ophthalmologist",
+            bio: "Specialist in cataract and laser vision correction.",
+            experience: "Over 15 years in ophthalmic care.",
+            image: "images/Dr. Rajesh Chaturvedi.jpg",
+            fee: 700
+        }, {
+            id: 6,
+            name: "Dr. Hansraj Mittal",
+            department: "Oncologist",
+            bio: "Expert in cancer diagnosis and radiation therapy.",
+            experience: "Head of Oncology at LifeCare Institute.",
+            image: "images/Dr. Hansraj Mittal.jpg",
+            fee: 950
+        }, {
+            id: 7,
+            name: "Dr. Lookesh Ratti",
+            department: "Gastroenterologist",
+            bio: "Experienced in digestive and liver disorder treatments.",
+            experience: "Consultant at Apollo Gastro Centre.",
+            image: "images/Dr. Lookesh Ratti.jpeg",
+            fee: 750
+        }, {
+            id: 8,
+            name: "Dr. Preem Dhillon",
+            department: "Pulmonologist",
+            bio: "Specialist in respiratory and lung disorders.",
+            experience: "10+ years treating COPD and asthma.",
+            image: "images/Dr. Preem Dhillon.jpg",
+            fee: 700
+        }, {
+            id: 9,
+            name: "Dr. Pankaj Mahato",
+            department: "Nephrologist",
+            bio: "Expert in kidney diseases and dialysis care.",
+            experience: "Worked with Global Kidney Care Unit.",
+            image: "images/Dr. Pankaj Mahato.jpeg",
+            fee: 850
+        }, {
+            id: 10,
+            name: "Dr. Lily Chiru",
+            department: "Endocrinologist",
+            bio: "Experienced in hormonal and metabolic disorders.",
+            experience: "Consultant Endocrinologist at Metro Hospital.",
+            image: "images/Dr. Lily Chiru.jpg",
+            fee: 800
+        }, {
+            id: 11,
+            name: "Dr. Roshni Mehta",
+            department: "Dermatologist",
+            bio: "Specialist in skin and cosmetic procedures.",
+            experience: "Over 9 years in dermatology and aesthetics.",
+            image: "images/Dr. Roshni Mehta.jpeg",
+            fee: 600
+        }, {
+            id: 12,
+            name: "Dr. Biplab Gogoi",
+            department: "Psychiatrist",
+            bio: "Expert in mental health and counselling.",
+            experience: "Practicing psychiatrist for over 11 years.",
+            image: "images/Dr. Biplab Gogoi.jpg",
+            fee: 700
+        }, {
+            id: 13,
+            name: "Dr. Swati Mishra",
+            department: "Gynecologist & Obstetrics",
+            bio: "Dedicated to women’s health and maternity care.",
+            experience: "Consultant at Women’s Wellness Clinic.",
+            image: "images/Dr. Swati Mishra.jpg",
+            fee: 750
+        }, {
+            id: 14,
+            name: "Dr. Aniket Yadav",
+            department: "Neonatologist",
+            bio: "Caring for newborn and premature infants.",
+            experience: "Worked at ChildCare Hospital, Lucknow.",
+            image: "images/Dr. Aniket Yadav.webp",
+            fee: 650
+        }, {
+            id: 15,
+            name: "Dr. Joseph Marak",
+            department: "Venereology & Leprosy",
+            bio: "Specialist in infectious and skin-related diseases.",
+            experience: "Senior Consultant at Dermacare Centre.",
+            image: "images/Dr. Joseph Marak.jpg",
+            fee: 700
+        }, {
+            id: 16,
+            name: "Dr. Kavita Deshmukh",
+            department: "Oral & Maxillofacial Surgeon",
+            bio: "Expert in facial trauma and dental surgeries.",
+            experience: "Over 10 years in reconstructive surgery.",
+            image: "images/Dr. Kavita Deshmukh.jpeg",
+            fee: 800
+        }, {
+            id: 17,
+            name: "Dr. Debashish Mondal",
+            department: "Urologist",
+            bio: "Experienced in prostate and urinary tract surgeries.",
+            experience: "Ex-surgeon at National Urology Institute.",
+            image: "images/Dr. Debashish Mondal.webp",
+            fee: 850
+        }, {
+            id: 18,
+            name: "Dr. Sneha Roy",
+            department: "Vascular Surgeon",
+            bio: "Expert in artery and vein surgical treatments.",
+            experience: "Performed 300+ vascular operations.",
+            image: "images/Dr. Sneha Roy.jpg",
+            fee: 950
+        }, {
+            id: 19,
+            name: "Dr. Sushma Pillai",
+            department: "Thoracic Surgeon",
+            bio: "Specialist in lung and chest surgeries.",
+            experience: "Worked with Apollo Thoracic Unit.",
+            image: "images/Dr. Sushma Pillai.jpg",
+            fee: 950
+        }, {
+            id: 20,
+            name: "Dr. Aravind Shetty",
+            department: "Radiologist",
+            bio: "Specialist in CT, MRI, and ultrasound imaging.",
+            experience: "Radiologist with 12+ years of diagnostic experience.",
+            image: "images/Dr. Aravind Shetty.jpg",
+            fee: 700
+        }, {
+            id: 21,
+            name: "Dr. Sagun Rathoor",
+            department: "Prosthodontics",
+            bio: "Expert in dental prosthetics and jaw rehabilitation.",
+            experience: "Practicing prosthodontist for 8 years.",
+            image: "images/Dr. Sagun Rathoor.jpg",
+            fee: 600
+        }, {
+            id: 22,
+            name: "Dr. Ananya Reddy",
+            department: "Periodontology",
+            bio: "Specialist in gum disease and oral hygiene.",
+            experience: "Consultant at SmileCare Clinic.",
+            image: "images/Dr. Ananya Reddy.webp",
+            fee: 550
+        }, {
+            id: 23,
+            name: "Dr. Karthik Nair",
+            department: "Clinical Hematologist",
+            bio: "Expert in blood disorders and transfusion medicine.",
+            experience: "Senior Consultant at MedLife Hospital.",
+            image: "images/Dr. Karthik Nair.jpg!w700wp",
+            fee: 850
+        }, {
+            id: 24,
+            name: "Dr. Meenakshi Iyer",
+            department: "Transplantation",
+            bio: "Experienced in organ transplantation and post-op care.",
+            experience: "Lead Surgeon at MedTransplant Unit.",
+            image: "images/Dr. Meenakshi Iyer.jpg",
+            fee: 950
+        }];
+
+        /************************************************************************
+         * App state & helpers (simulating what React did)
+         ************************************************************************/
+        let currentModal = null;
+        let demoPaid = false;
+        let fullPaid = false;
+        let callActive = false;
+        let callTime = 120; // seconds
+        let timerInterval = null;
+        let jitsiApi = null;
+        let currentCallId = null;
+
+        // Simple "backend" using localStorage to store calls log
+        function saveCallLog(entry) {
+            const list = JSON.parse(localStorage.getItem('calls') || '[]');
+            list.push(entry);
+            localStorage.setItem('calls', JSON.stringify(list));
+            return list.length - 1; // id (index)
+        }
+
+        function updateCallLog(id, patch) {
+            const list = JSON.parse(localStorage.getItem('calls') || '[]');
+            if (list[id]) {
+                list[id] = {...list[id],
+                    ...patch
+                };
+                localStorage.setItem('calls', JSON.stringify(list));
+            }
+        }
+
+        // If you want to use Firestore instead, replace saveCallLog/updateCallLog with Firestore addDoc/updateDoc logic
+        // e.g.
+        // async function saveCallLogFirestore(data) { const docRef = await addDoc(collection(db,"calls"), data); return docRef.id; }
+        // (You'll need to include Firebase SDK and initialize it. I left placeholders intentionally.)
+
+        /************************************************************************
+         * UI rendering: doctors grid
+         ************************************************************************/
+        const gridEl = document.getElementById('doctorsGrid');
+
+        function renderDoctors() {
+            gridEl.innerHTML = '';
+            doctors.forEach(d => {
+                const card = document.createElement('div');
+                card.className = 'doctor-card';
+                card.innerHTML = `
+          <img src="${d.image}" alt="${escapeHtml(d.name)}" onerror="this.src='https://via.placeholder.com/300x180?text=No+Image'"/>
+          <h3>${escapeHtml(d.name)}</h3>
+          <p class="small">${escapeHtml(d.department)}</p>
+        `;
+                card.addEventListener('click', () => openModal(d));
+                gridEl.appendChild(card);
+            });
+        }
+
+        function escapeHtml(s) {
+            return String(s).replace(/[&<>"']/g, c => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[c]));
+        }
+
+        /************************************************************************
+         * Modal / Call logic
+         ************************************************************************/
+        const modalRoot = document.getElementById('modal-root');
+
+        function openModal(doctor) {
+            currentModal = doctor;
+            demoPaid = false;
+            fullPaid = false;
+            callActive = false;
+            callTime = 120;
+            renderModal();
+        }
+
+        function closeModal() {
+            disposeCall();
+            modalRoot.innerHTML = '';
+            currentModal = null;
+        }
+
+        function renderModal() {
+            modalRoot.innerHTML = `
+        <div class="modal-backdrop" id="backdrop">
+          <div class="modal" role="dialog" aria-modal="true">
+            <button class="close" id="modalClose">×</button>
+            <img class="profile" src="${currentModal.image}" alt="${escapeHtml(currentModal.name)}" onerror="this.src='https://via.placeholder.com/140'"/>
+            <h2 style="text-align:center;color:var(--accent)">${escapeHtml(currentModal.name)}</h2>
+            <h4 style="text-align:center;color:var(--primary)">${escapeHtml(currentModal.department)}</h4>
+            <p style="text-align:center;color:var(--muted)">${escapeHtml(currentModal.bio)}</p>
+
+            <div id="modal-body" style="margin-top:12px"></div>
+          </div>
+        </div>
+      `;
+            document.getElementById('modalClose').addEventListener('click', closeModal);
+            document.getElementById('backdrop').addEventListener('click', closeModal);
+
+            // stop click inside modal from closing
+            document.querySelector('.modal').addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            updateModalBody();
+        }
+
+        function updateModalBody() {
+            const body = document.getElementById('modal-body');
+            if (!demoPaid) {
+                body.innerHTML = `
+          <div class="center">
+            <h4>Pay 20% (Demo)</h4>
+            <div id="qrcode-demo" style="display:inline-block;margin:8px"></div>
+            <div style="margin-top:8px">
+              <button id="btn-demo-paid" class="btn green">✅ Payment Done (Demo)</button>
+            </div>
+          </div>
+        `;
+                // render QR
+                QRCode.toCanvas(document.getElementById('qrcode-demo'), 'upi://pay?pa=demo@upi&am=100', {
+                    width: 150
+                }).catch(console.error);
+                document.getElementById('btn-demo-paid').addEventListener('click', handleDemoPayment);
+            } else {
+                // call area
+                body.innerHTML = `
+          <div style="margin-top:10px">
+            <h4 style="color:var(--primary);text-align:center">🎥 ${fullPaid ? 'Full' : 'Demo'} Call in Progress</h4>
+            <p class="center small" id="timer-text"></p>
+            <div id="jitsi-container" style="height:400px;width:100%;margin-top:10px;border:2px solid var(--primary);border-radius:10px"></div>
+            <input id="message-sim" type="text" placeholder="Type message (simulation)" />
+            <div id="full-payment-area" class="center" style="margin-top:10px"></div>
+            <div class="center" style="margin-top:12px">
+              <button id="btn-end-call" class="btn" style="background:#dc3545">End Call</button>
+            </div>
+          </div>
+        `;
+                document.getElementById('message-sim').addEventListener('input', (e) => {
+                    const text = e.target.value.toLowerCase();
+                    // auto-end on abusive words
+                    const badWords = ["abuse", "idiot", "hate", "stupid", "kill"];
+                    if (badWords.some(w => text.includes(w)) && callActive) {
+                        alert('⚠️ Abusive word detected! Call automatically ended.');
+                        endCall('abuse_detected');
+                    }
+                });
+                document.getElementById('btn-end-call').addEventListener('click', () => endCall('user_hangup'));
+
+                if (!callActive) startDemoCall();
+                else updateTimerText();
+            }
+        }
+
+        async function handleDemoPayment() {
+            alert('✅ 20% Demo Payment Successful!');
+            demoPaid = true;
+            // create a call log entry
+            const callEntry = {
+                doctor: currentModal.name,
+                type: 'demo',
+                startTime: new Date().toISOString(),
+                status: 'active',
+                paidStatus: 'demo'
+            };
+            const id = saveCallLog(callEntry);
+            currentCallId = id;
+            callActive = true;
+            callTime = 120;
+            renderModal(); // re-render to show call area
+        }
+
+        async function handleFullPayment() {
+            alert('✅ Full Payment Successful!');
+            fullPaid = true;
+            // patch call log
+            if (currentCallId !== null) {
+                updateCallLog(currentCallId, {
+                    paidStatus: 'full',
+                    paymentUpdate: new Date().toISOString()
+                });
+            }
+            // restart or continue call as full
+            renderModal();
+        }
+
+        /****************
+          Jitsi & timer
+        *****************/
+        function startDemoCall() {
+            // Append Jitsi script if not already loaded
+            if (!window.JitsiMeetExternalAPI) {
+                const s = document.createElement('script');
+                s.src = 'https://meet.jit.si/external_api.js';
+                s.async = true;
+                s.onload = () => {
+                    _startJitsiInstance();
+                };
+                document.body.appendChild(s);
+            } else {
+                _startJitsiInstance();
+            }
+        }
+
+        function _startJitsiInstance() {
+            const container = document.getElementById('jitsi-container');
+            // dispose old instance if any
+            if (jitsiApi) jitsiApi.dispose();
+
+            const domain = "meet.jit.si";
+            const roomName = `DoctorCall_${currentModal.name.replace(/\s+/g,'_')}_${Date.now()}`;
+            const options = {
+                roomName,
+                width: '100%',
+                height: 400,
+                parentNode: container,
+                interfaceConfigOverwrite: {
+                    TOOLBAR_BUTTONS: ["microphone", "camera", "hangup"]
+                },
+                configOverwrite: {
+                    prejoinPageEnabled: false
+                }
+            };
+            try {
+                jitsiApi = new window.JitsiMeetExternalAPI(domain, options);
+                jitsiApi.addListener('readyToClose', () => endCall('user_hangup'));
+            } catch (err) {
+                console.warn('Jitsi API error', err);
+                container.innerHTML = '<div style="padding:20px">Unable to start Jitsi here — check browser or network.</div>';
+            }
+            // start timer
+            callActive = true;
+            startTimer();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            updateTimerText();
+            timerInterval = setInterval(() => {
+                if (!callActive || fullPaid) {
+                    clearInterval(timerInterval);
+                    return;
+                }
+                callTime -= 1;
+                updateTimerText();
+                if (callTime <= 0) {
+                    clearInterval(timerInterval);
+                    // end demo call
+                    endCall('demo_time_over');
+                    // show full payment UI inside modal if modal open
+                    showFullPaymentPrompt();
+                }
+            }, 1000);
+        }
+
+        function updateTimerText() {
+            const el = document.getElementById('timer-text');
+            if (!el) return;
+            if (fullPaid) el.textContent = 'Full session — unlimited';
+            else {
+                el.textContent = `Time left: ${Math.floor(callTime/60)}:${String(callTime%60).padStart(2,'0')}`;
+            }
+        }
+
+        function showFullPaymentPrompt() {
+            const area = document.getElementById('full-payment-area');
+            if (!area) return;
+            area.innerHTML = `
+        <h4>⏱️ Demo over! Continue full consultation</h4>
+        <p>Pay the remaining 80% to continue your video session.</p>
+        <div id="qrcode-full" style="display:inline-block;margin:8px"></div>
+        <div style="margin-top:8px"><button id="btn-full-paid" class="btn">✅ Full Payment Done</button></div>
+      `;
+            QRCode.toCanvas(document.getElementById('qrcode-full'), 'upi://pay?pa=full@upi&am=400', {
+                width: 150
+            }).catch(console.error);
+            document.getElementById('btn-full-paid').addEventListener('click', handleFullPayment);
+            // optionally allow user to reopen call after paying
+        }
+
+        async function endCall(reason) {
+            // mark ended
+            callActive = false;
+            if (jitsiApi) {
+                try {
+                    jitsiApi.dispose();
+                } catch (e) {}
+                jitsiApi = null;
+            }
+            clearInterval(timerInterval);
+            updateCallLog(currentCallId, {
+                endTime: new Date().toISOString(),
+                status: 'ended',
+                reason
+            });
+            alert('📞 Call Ended');
+            // re-render modal to show payment UI if needed
+            if (currentModal) {
+                updateModalBody();
+            }
+        }
+
+        function disposeCall() {
+            callActive = false;
+            if (jitsiApi) {
+                try {
+                    jitsiApi.dispose();
+                } catch (e) {}
+                jitsiApi = null;
+            }
+            clearInterval(timerInterval);
+            currentCallId = null;
+        }
+
+        /************************************************************************
+         * Simple "routing" to toggle views
+         ************************************************************************/
+        const linkHome = document.getElementById('link-home');
+        const linkDash = document.getElementById('link-dashboard');
+        const viewDoctors = document.getElementById('doctors-view');
+        const viewDash = document.getElementById('dashboard-view');
+
+        linkHome.addEventListener('click', () => {
+            viewDoctors.style.display = 'block';
+            viewDash.style.display = 'none';
+        });
+        linkDash.addEventListener('click', () => {
+            viewDoctors.style.display = 'none';
+            viewDash.style.display = 'block';
+            renderDashboard();
+        });
+
+        /************************************************************************
+         * Dashboard rendering (uses sample data you provided)
+         ************************************************************************/
+        function renderDashboard() {
+            const stats = {
+                totalPatients: 120,
+                treatedPatients: 95,
+                admittedPatients: 18,
+                beds: {
+                    total: 50,
+                    occupied: 35
+                }
+            };
+            document.getElementById('stat-total').textContent = `Total Patients: ${stats.totalPatients}`;
+            document.getElementById('stat-treated').textContent = `Treated Patients: ${stats.treatedPatients}`;
+            document.getElementById('stat-admitted').textContent = `Admitted Patients: ${stats.admittedPatients}`;
+            document.getElementById('stat-beds').textContent = `Beds: ${stats.beds.occupied}/${stats.beds.total} occupied`;
+
+            const departments = [{
+                name: "Cardiology",
+                busy: 45
+            }, {
+                name: "Orthopaedics",
+                busy: 30
+            }, {
+                name: "Neurology",
+                busy: 20
+            }, {
+                name: "Paediatrics",
+                busy: 25
+            }];
+            const deptList = document.getElementById('dept-list');
+            deptList.innerHTML = '';
+            departments.forEach(d => {
+                const li = document.createElement('li');
+                li.innerHTML = `${escapeHtml(d.name)} — <strong>${d.busy}</strong> active cases`;
+                deptList.appendChild(li);
+            });
+
+            const bloodBank = [{
+                group: "A+",
+                units: 12
+            }, {
+                group: "B+",
+                units: 8
+            }, {
+                group: "O+",
+                units: 15
+            }, {
+                group: "AB+",
+                units: 6
+            }, {
+                group: "A-",
+                units: 5
+            }];
+            const bb = document.getElementById('blood-bank');
+            bb.innerHTML = '';
+            bloodBank.forEach(b => {
+                const el = document.createElement('div');
+                el.className = 'card';
+                el.style.background = '#f1f1f1';
+                el.innerHTML = `<strong>${b.group}</strong>: ${b.units} units`;
+                bb.appendChild(el);
+            });
+
+            const medicines = [{
+                name: "Paracetamol",
+                stock: 200
+            }, {
+                name: "Amoxicillin",
+                stock: 120
+            }, {
+                name: "Cough Syrup",
+                stock: 0
+            }, {
+                name: "Vitamin D",
+                stock: 45
+            }];
+            const medBody = document.getElementById('medicines-body');
+            medBody.innerHTML = '';
+            medicines.forEach(m => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td style="padding:14px">${escapeHtml(m.name)}</td><td>${m.stock}</td><td style="color:${m.stock===0?'red':'green'}">${m.stock===0?'Out of Stock':'Available'}</td>`;
+                medBody.appendChild(tr);
+            });
+
+            const patientHistory = [{
+                name: "Rohit Singh",
+                disease: "Fever",
+                status: "Recovered"
+            }, {
+                name: "Sneha Tiwari",
+                disease: "Fracture",
+                status: "Admitted"
+            }, {
+                name: "Vikas Yadav",
+                disease: "Asthma",
+                status: "Recovered"
+            }];
+            const hist = document.getElementById('patient-history');
+            hist.innerHTML = '';
+            patientHistory.forEach(p => {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${escapeHtml(p.name)}</strong> — ${escapeHtml(p.disease)} (${escapeHtml(p.status)})`;
+                hist.appendChild(li);
+            });
+        }
+
+        /************************************************************************
+         * Init
+         ************************************************************************/
+        renderDoctors();
+
+        // Handy: close modal with Escape
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && currentModal) closeModal();
+        });
+
+        // Optional: load dashboard when #dashboard in url
+        if (location.hash === '#dashboard') {
+            linkDash.click();
+        }
+
+        /************************************************************************
+         * End
+         ************************************************************************/
+    </script>
+</body>
+
+</html>

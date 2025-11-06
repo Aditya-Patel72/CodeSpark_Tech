@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MindSync | Peer Community</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #6b8cbc;
+            --accent: #ff6b6b;
+            --light: #f8f9fa;
+            --dark: #343a40;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        header {
+            background-color: var(--light);
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .navbar .logo i {
+            color: var(--secondary);
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            background-color: var(--primary);
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 120px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: auto;
+            font-size: 1.1rem;
+        }
+
+        .hero button {
+            background-color: white;
+            color: var(--primary);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            margin-top: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .hero button:hover {
+            background-color: var(--accent);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Groups Section */
+        .groups {
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .groups h2 {
+            color: var(--primary);
+            margin-bottom: 40px;
+        }
+
+        .group-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .group-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .group-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Posts Section */
+        .posts {
+            background: #f0f8ff;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .posts h2 {
+            color: var(--primary);
+            margin-bottom: 40px;
+        }
+
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .post-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .post-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        /* Join Section */
+        .join {
+            text-align: center;
+            padding: 100px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .join h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .join p {
+            margin-bottom: 20px;
+        }
+
+        .btn-glow {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-glow:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px white;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                background: white;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .navbar .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu {
+                display: block;
+                font-size: 1.8rem;
+                cursor: pointer;
+                color: var(--primary);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="navbar">
+            <a href="{{ url_for('home') }}" class="logo">
+                <i class="fas fa-brain"></i> MindSync
+            </a>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('home') }}#about">About</a>
+                <a href="{{ url_for('home') }}#features">Features</a>
+                <a href="{{ url_for('peer') }}" class="active">Community</a>
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('register') }}">Register</a>
+                <a href="{{ url_for('chatbot_page') }}" class="cta-button">Chat with AI</a>
+            </div>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Connect. Share. Heal Together.</h1>
+        <p>Your safe, supportive space to discuss mental health, wellness, and personal growth with others who understand.</p>
+        <button onclick="document.getElementById('groups').scrollIntoView({behavior: 'smooth'})">Explore Groups</button>
+    </section>
+
+    <!-- Groups Section -->
+    <section id="groups" class="groups">
+        <h2>Community Groups</h2>
+        <div class="group-grid">
+            <div class="group-card">
+                <h3>🧠 Mental Health</h3>
+                <p>Share your thoughts, challenges, and coping strategies.</p>
+            </div>
+            <div class="group-card">
+                <h3>💪 Fitness & Recovery</h3>
+                <p>Motivate and stay accountable together.</p>
+            </div>
+            <div class="group-card">
+                <h3>🍎 Nutrition & Diet</h3>
+                <p>Healthy habits, mindful eating, and a balanced life.</p>
+            </div>
+            <div class="group-card">
+                <h3>💬 General Chat</h3>
+                <p>Talk freely about your day, feelings, or experiences.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Posts Section -->
+    <section id="posts" class="posts">
+        <h2>Trending Discussions</h2>
+        <div class="post-grid">
+            <div class="post-card">
+                <h4>“Coping with Exam Anxiety”</h4>
+                <p>Students share real experiences and calming routines.</p>
+            </div>
+            <div class="post-card">
+                <h4>“My Journey to Self-Confidence”</h4>
+                <p>Members talk about self-esteem and growth.</p>
+            </div>
+            <div class="post-card">
+                <h4>“Daily Gratitude Challenge 🌸”</h4>
+                <p>Join a 7-day journey to focus on positivity.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Join Section -->
+    <section id="join" class="join">
+        <h2>Be part of something healing 💚</h2>
+        <p>Join discussions, share experiences, and support others.</p>
+        <button class="btn-glow" onclick="window.location.href='{{ url_for('register') }}'">Join Now</button>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 MindSync — Building a safe space for every student 💙</p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu').addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

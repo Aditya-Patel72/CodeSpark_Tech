@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MindSync | Register</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary: #4a6fa5;
+      --secondary: #6b8cbc;
+      --accent: #ff6b6b;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navbar */
+    header {
+      background-color: var(--light);
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: var(--shadow);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .navbar .logo i {
+      font-size: 2rem;
+      margin-right: 10px;
+      color: var(--secondary);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 500;
+      margin-left: 25px;
+      position: relative;
+      padding: 5px 0;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0%;
+      height: 2px;
+      background-color: var(--primary);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .cta-button {
+      background-color: var(--primary);
+      color: white !important;
+      padding: 10px 20px;
+      border-radius: 25px;
+      margin-left: 30px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .cta-button:hover {
+      background-color: var(--accent);
+    }
+
+    /* Register Section */
+    .register-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 50px 20px;
+    }
+
+    .register-box {
+      background-color: var(--light);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .register-box h2 {
+      margin-bottom: 25px;
+      color: var(--primary);
+      font-size: 2rem;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      font-weight: 500;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      border-color: var(--primary);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: var(--shadow);
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .login-link {
+      margin-top: 20px;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .login-link a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      color: var(--accent);
+    }
+
+    /* Animation */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      .mobile-menu {
+        display: block;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: var(--primary);
+      }
+      .nav-links.active {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        background-color: var(--light);
+        top: 70px;
+        left: 0;
+        width: 100%;
+        padding: 20px;
+        box-shadow: var(--shadow);
+      }
+      .nav-links a {
+        margin: 10px 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <header>
+    <div class="container">
+      <nav class="navbar">
+        <a href="{{ url_for('home') }}" class="logo">
+          <i class="fas fa-brain"></i> MindSync
+        </a>
+
+        <div class="nav-links">
+          <a href="{{ url_for('home') }}#home">Home</a>
+          <a href="{{ url_for('home') }}#about">About</a>
+          <a href="{{ url_for('home') }}#features">Features</a>
+          <a href="{{ url_for('home') }}#contact">Contact</a>
+          <a href="{{ url_for('login') }}">Login</a>
+          <a href="{{ url_for('register') }}" class="active">Register</a>
+          <a href="{{ url_for('chatbot_page') }}" class="cta-button">Chat Now</a>
+        </div>
+
+        <div class="mobile-menu">
+          <i class="fas fa-bars"></i>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Register Form -->
+  <div class="register-container">
+    <div class="register-box">
+      <h2>Create Your MindSync Account 🧠</h2>
+      <form id="registerForm">
+        <div class="input-group">
+          <label for="fullname">Full Name</label>
+          <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required />
+        </div>
+
+        <div class="input-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email" required />
+        </div>
+
+        <div class="input-group">
+          <label for="university">University / College</label>
+          <input type="text" id="university" name="university" placeholder="Enter your institution" required />
+        </div>
+
+        <div class="input-group">
+          <label for="year">Year of Study</label>
+          <select id="year" name="year" required>
+            <option value="">Select year</option>
+            <option value="1">1st Year</option>
+            <option value="2">2nd Year</option>
+            <option value="3">3rd Year</option>
+            <option value="4">4th Year</option>
+            <option value="postgrad">Postgraduate</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Create a password" required />
+        </div>
+
+        <div class="input-group">
+          <label for="confirm-password">Confirm Password</label>
+          <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm password" required />
+        </div>
+
+        <button type="submit">Create Account</button>
+      </form>
+
+      <p class="login-link">
+        Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Mobile menu toggle
+    document.querySelector('.mobile-menu').addEventListener('click', function () {
+      const navLinks = document.querySelector('.nav-links');
+      navLinks.classList.toggle('active');
+    });
+
+    // Password validation
+    document.getElementById('registerForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const pass = document.getElementById('password').value;
+      const confirm = document.getElementById('confirm-password').value;
+
+      if (pass !== confirm) {
+        alert('Passwords do not match!');
+        return;
+      }
+
+      alert('Account created successfully! Redirecting...');
+      window.location.href = "{{ url_for('login') }}";
+    });
+  </script>
+</body>
+</html>
