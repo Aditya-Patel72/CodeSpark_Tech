@@ -17,6 +17,10 @@ Whether you need someone to talk to at 3 AM, want to connect with someone who ge
 We're breaking down barriers around mental health while saving costs. This isn't just another app - it's a sustainable support system that actually works for Indian students, built on reliable technology that grows with you.
 
 Links:
-Demo Video:<a href="https://drive.google.com/file/d/1QJydysEwtZbS70Kp6Q2M3cF5oJblzZH6/view?usp=sharing" target="_blank">Open Google Drive File</a>
+Demo Video:<a href="https://drive.google.com/file/d/1QJydysEwtZbS70Kp6Q2M3cF5oJblzZH6/view?usp=sharing" target="_blank">Video Open Google Drive File</a>
 
-PPT: <a href="https://drive.google.com/file/d/1LmnL6QnnnYBYcQevMLSFOpwC4SOCwnJD/view?usp=drive_link">Open Google Drive File</a>
+PPT: <a href="https://docs.google.com/presentation/d/1mSozUJwqTwU07u9SO8R1FIuGARg34Cqu/edit?usp=sharing&ouid=100558414059181287499&rtpof=true&sd=true">PPT Open Google Drive File</a>
+
+PPT: <a href="https://drive.google.com/file/d/1LmnL6QnnnYBYcQevMLSFOpwC4SOCwnJD/view?usp=drive_link">PPT Open Google Drive File</a>
+
+Idea: <a href="https://drive.google.com/file/d/1mE3oUMWWwmUMJcj1wXqFzXJ6LQRcfdq7/view?usp=sharing">PDF</a>
